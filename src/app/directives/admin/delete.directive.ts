@@ -1,4 +1,17 @@
-import { Directive, ElementRef, HostListener, Input, Output, Renderer2, EventEmitter } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+  Output,
+  Renderer2,
+  EventEmitter,
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  DeleteDialogComponent,
+  DeleteState,
+} from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 import { ProductService } from 'src/app/services/common/product.service';
 
 declare var $: any;
@@ -10,7 +23,8 @@ export class DeleteDirective {
   constructor(
     private element: ElementRef,
     private _renderer: Renderer2,
-    private productService: ProductService
+    private productService: ProductService,
+    public dialog: MatDialog
   ) {
     const icon = _renderer.createElement('mat-icon');
     icon.setAttribute('fontIcon', 'delete');
@@ -32,10 +46,25 @@ export class DeleteDirective {
 
   @HostListener('click')
   async onClick() {
-    const td: HTMLTableCellElement = this.element.nativeElement;
-    await this.productService.delete(this.id);
-    $(td.parentElement).fadeOut(200, () => {
-      this.callback.emit();
+    this.openDialog(async () => {
+      const td: HTMLTableCellElement = this.element.nativeElement;
+      await this.productService.delete(this.id);
+      $(td.parentElement).fadeOut(200, () => {
+        this.callback.emit();
+      });
+    });
+  }
+
+  openDialog(afterClosed: any): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      // width:'250px',
+      data: DeleteState.Yes,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == DeleteState.Yes) {
+        afterClosed();
+      }
     });
   }
 }
