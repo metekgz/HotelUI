@@ -8,6 +8,12 @@ import {
   ToastrMessageType,
   ToastrPosition,
 } from '../../user/custom-toastr.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogService } from '../dialog.service';
+import {
+  FileUploadDialogComponent,
+  FileUploadDialogState,
+} from 'src/app/dialogs/file-upload-dialog/file-upload-dialog.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -18,7 +24,9 @@ export class FileUploadComponent {
   constructor(
     private httpClientService: HttpClientService,
     private alertfy: AlertifyService,
-    private toastr: CustomToastrService
+    private toastr: CustomToastrService,
+    private dialog: MatDialog,
+    private dialogService: DialogService
   ) {}
 
   public files: NgxFileDropEntry[];
@@ -33,40 +41,46 @@ export class FileUploadComponent {
         fileData.append(_file.name, _file, file.relativePath);
       });
     }
-    this.httpClientService
-      .post(
-        {
-          controller: this.options.controller,
-          action: this.options.action,
-          queryString: this.options.queryString,
-          headers: new HttpHeaders({ responseType: 'blob' }),
-        },
-        fileData
-      )
-      .subscribe(
-        (data) => {
-          const message: string = 'Dosyalar Yüklendi';
-          if (this.options.isAdminPage) {
-            this.alertfy.message(message, MessageType.Success);
-          } else {
-            this.toastr.message(message, '', {
-              messageType: ToastrMessageType.Success,
-              position: ToastrPosition.BottomRight,
-            });
-          }
-        },
-        (errorResponse: HttpErrorResponse) => {
-          const message: string = 'Dosyalar Yüklenemedi';
-          if (this.options.isAdminPage) {
-            this.alertfy.message(message, MessageType.Error);
-          } else {
-            this.toastr.message(message, '', {
-              messageType: ToastrMessageType.Error,
-              position: ToastrPosition.BottomRight,
-            });
-          }
-        }
-      );
+    this.dialogService.openDialog({
+      componentType: FileUploadDialogComponent,
+      data: FileUploadDialogState.Yes,
+      afterClosed: () => {
+        this.httpClientService
+          .post(
+            {
+              controller: this.options.controller,
+              action: this.options.action,
+              queryString: this.options.queryString,
+              headers: new HttpHeaders({ responseType: 'blob' }),
+            },
+            fileData
+          )
+          .subscribe(
+            (data) => {
+              const message: string = 'Dosyalar Yüklendi';
+              if (this.options.isAdminPage) {
+                this.alertfy.message(message, MessageType.Success);
+              } else {
+                this.toastr.message(message, '', {
+                  messageType: ToastrMessageType.Success,
+                  position: ToastrPosition.BottomRight,
+                });
+              }
+            },
+            (errorResponse: HttpErrorResponse) => {
+              const message: string = 'Dosyalar Yüklenemedi';
+              if (this.options.isAdminPage) {
+                this.alertfy.message(message, MessageType.Error);
+              } else {
+                this.toastr.message(message, '', {
+                  messageType: ToastrMessageType.Error,
+                  position: ToastrPosition.BottomRight,
+                });
+              }
+            }
+          );
+      },
+    });
   }
 }
 

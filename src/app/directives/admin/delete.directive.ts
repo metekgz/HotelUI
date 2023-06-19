@@ -3,6 +3,7 @@ import { Directive, ElementRef, HostListener, Input, Output, Renderer2, EventEmi
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent, DeleteState } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 import { AlertifyService, MessageType } from 'src/app/services/admin/alertify.service';
+import { DialogService } from 'src/app/services/common/dialog.service';
 import { HttpClientService } from 'src/app/services/common/http-client.service';
 
 declare var $: any;
@@ -16,7 +17,8 @@ export class DeleteDirective {
     private _renderer: Renderer2,
     private httpClientService: HttpClientService,
     public dialog: MatDialog,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private dialogService:DialogService
   ) {
     const icon = _renderer.createElement('mat-icon');
     icon.setAttribute('fontIcon', 'delete');
@@ -36,41 +38,35 @@ export class DeleteDirective {
 
   @HostListener('click')
   async onClick() {
-    this.openDialog(async () => {
-      const td: HTMLTableCellElement = this.element.nativeElement;
-      this.httpClientService
-        .delete(
-          {
-            controller: this.controller,
-          },
-          this.id
-        )
-        .subscribe(
-          (data) => {
-            $(td.parentElement).fadeOut(200, () => {
-              this.callback.emit();
-              this.alertify.message(
-                'Ürün Başarıyla Silindi',
-                MessageType.Success
-              );
-            });
-          },
-          (errorResponse: HttpErrorResponse) => {
-            this.alertify.message('Ürün Silinemedi', MessageType.Error);
-          }
-        );
-    });
-  }
-
-  openDialog(afterClosed: any): void {
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: DeleteState.Yes,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == DeleteState.Yes) {
-        afterClosed();
+    this.dialogService.openDialog({
+      componentType:DeleteDialogComponent,
+      data:DeleteState.Yes,
+      afterClosed:async () => {
+        const td: HTMLTableCellElement = this.element.nativeElement;
+        this.httpClientService
+          .delete(
+            {
+              controller: this.controller,
+            },
+            this.id
+          )
+          .subscribe(
+            (data) => {
+              $(td.parentElement).fadeOut(200, () => {
+                this.callback.emit();
+                this.alertify.message(
+                  'Ürün Başarıyla Silindi',
+                  MessageType.Success
+                );
+              });
+            },
+            (errorResponse: HttpErrorResponse) => {
+              this.alertify.message('Ürün Silinemedi', MessageType.Error);
+            }
+          );
       }
     });
   }
+
+
 }
