@@ -1,0 +1,17 @@
+.product-image-card {
+  max-width: 200px;
+}
+
+.product-header-image {
+  background-size: cover;
+}
+
+.delete-btn {
+  background-color: rgb(41, 41, 206);
+  color: white;
+}
+
+.img-card {
+  float: left;
+  margin: 5px;
+}
