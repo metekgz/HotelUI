@@ -9,11 +9,12 @@ const routes: Routes = [
     {path:"",component:DashboardComponent},
     {path:"customers",loadChildren:()=> import("./admin/components/customers/customers.module").then(module => module.CustomersModule)},
     {path:"products",loadChildren:()=> import("./admin/components/products/products.module").then(module => module.ProductsModule)},
-    {path:"rooms",loadChildren:()=> import("./admin/components/rooms/rooms.module").then(module => module.RoomsModule)}
+    {path:"rooms",loadChildren:()=> import("./admin/components/rooms/rooms.module").then(module => module.RoomsModule)},
   ]},
   {path:"",component:HomeComponent},
   {path:"products",loadChildren:()=> import("./user/components/products/products.module").then(module=>module.ProductsModule)},
-  {path:"rooms",loadChildren:()=> import("./user/components/rooms/rooms.module").then(module=>module.RoomsModule)}
+  {path:"rooms",loadChildren:()=> import("./user/components/rooms/rooms.module").then(module=>module.RoomsModule)},
+  {path:"register",loadChildren:()=> import("./user/components/register/register.module").then(module => module.RegisterModule)}
 ];
 
 @NgModule({

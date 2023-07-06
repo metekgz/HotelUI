@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <form
+      class="was-validated"
+      [formGroup]="frm"
+      (ngSubmit)="onSubmit(frm.value)"
+    >
+      <div class="form-floating mt-4 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Mete Karagöz"
+          required
+          formControlName="nameSurname"
+          [ngClass]="{ 'is-invalid': component.nameSurname.errors }"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="submitted && component.nameSurname.errors?.required"
+        >
+          İsim Soyisim boş bırakılamaz
+        </div>
+        <label for="floatingInput">İsim Soyisim</label>
+      </div>
+      <div class="form-floating mt-4 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Mete Karagöz"
+          required
+          formControlName="personName"
+          [ngClass]="{ 'is-invalid': component.personName.errors }"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="submitted && component.personName.errors?.required"
+        >
+          Kullanıcı Adı boş bırakılamaz
+        </div>
+        <label for="floatingInput">Kullanıcı Adı</label>
+      </div>
+      <div class="form-floating mt-4 mb-4">
+        <input
+          id="email"
+          type="email"
+          class="form-control"
+          placeholder="name@example.com"
+          required
+          formControlName="email"
+          [ngClass]="{ 'is-invalid': component.email.errors }"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            (submitted && component.email.errors?.required) ||
+            (submitted && component.email.errors?.email)
+          "
+        >
+          Email alanını boş bırakmayınız ve email kuralına uygun giriniz (@ ve
+          gmail.com vb )
+        </div>
+        <label for="floatingInput">Email</label>
+      </div>
+      <div class="form-floating mb-4">
+        <input
+          id="password"
+          type="password"
+          class="form-control"
+          placeholder="Password"
+          required
+          formControlName="password"
+          [ngClass]="{ 'is-invalid': component.password.errors }"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="submitted && component.password.errors?.required"
+        >
+          Şifre alanı boş bırakılamaz
+        </div>
+        <label for="floatingPassword">Şifre</label>
+      </div>
+      <div class="form-floating mb-4">
+        <input
+          id="password"
+          type="password"
+          class="form-control"
+          placeholder="confirmPassword"
+          required
+          formControlName="confirmPassword"
+          [ngClass]="{ 'is-invalid': component.confirmPassword.errors }"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="submitted && component.confirmPassword.errors?.required "
+        >
+          Şifre tekrar alanı boş bırakılamaz
+        </div>
+        <div
+        class="invalid-feedback"
+        *ngIf="submitted && frm.hasError('notSame')"
+      >
+        Lütfen aynı şifreyi giriniz
+      </div>
+        <label for="floatingPassword">Şifreyi Tekrar Giriniz</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+    </form>
+  </div>
+  <div class="col-md-3"></div>
+</div>
