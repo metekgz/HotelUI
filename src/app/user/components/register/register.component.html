@@ -29,12 +29,12 @@
           class="form-control"
           placeholder="Mete Karagöz"
           required
-          formControlName="personName"
-          [ngClass]="{ 'is-invalid': component.personName.errors }"
+          formControlName="userName"
+          [ngClass]="{ 'is-invalid': component.userName.errors }"
         />
         <div
           class="invalid-feedback"
-          *ngIf="submitted && component.personName.errors?.required"
+          *ngIf="submitted && component.userName.errors?.required"
         >
           Kullanıcı Adı boş bırakılamaz
         </div>

@@ -6,7 +6,14 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { Create_User } from 'src/app/contracts/users/create_user';
 import { User } from 'src/app/models/user';
+import { UserService } from 'src/app/services/common/models/user.service';
+import {
+  CustomToastrService,
+  ToastrMessageType,
+  ToastrPosition,
+} from 'src/app/services/user/custom-toastr.service';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +21,13 @@ import { User } from 'src/app/models/user';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-  constructor(private formBuilder: FormBuilder) {}
+  createUser: Create_User;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private toastService: CustomToastrService
+  ) {}
 
   frm: FormGroup;
 
@@ -29,7 +42,7 @@ export class RegisterComponent implements OnInit {
             Validators.maxLength(50),
           ],
         ],
-        personName: [
+        userName: [
           '',
           [
             Validators.required,
@@ -56,9 +69,28 @@ export class RegisterComponent implements OnInit {
   }
 
   submitted: boolean = false;
-  onSubmit(data: User) {
+  async onSubmit(user: User) {
     this.submitted = true;
 
     if (this.frm.invalid) return;
+    this.createUser = await this.userService.create(user);
+    if (this.createUser.succeeded)
+      this.toastService.message(
+        this.createUser.message,
+        'Kullanıcı Kaydı Oluşturuldu',
+        {
+          messageType: ToastrMessageType.Success,
+          position: ToastrPosition.BottomRight,
+        }
+      );
+    else
+      this.toastService.message(
+        this.createUser.message,
+        'Kullanıcı Kaydı Oluşturulamadı',
+        {
+          messageType: ToastrMessageType.Error,
+          position: ToastrPosition.BottomRight,
+        }
+      );
   }
 }
