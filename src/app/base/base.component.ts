@@ -8,6 +8,10 @@ export class BaseComponent {
       this.spinner.hide();
     }, 1000);
   }
+
+  hideSpinner(spinnerNameType: SpinnerName) {
+    this.spinner.hide(spinnerNameType);
+  }
 }
 export enum SpinnerName {
   BallNewton = 'ball-newton-cradle',
