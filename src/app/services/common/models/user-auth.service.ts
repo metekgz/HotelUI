@@ -3,13 +3,12 @@ import { HttpClientService } from '../http-client.service';
 import { SocialUser } from '@abacritt/angularx-social-login';
 import { Observable, firstValueFrom } from 'rxjs';
 import { TokenResponse } from 'src/app/contracts/token/tokenResponse';
-import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../../user/custom-toastr.service';
+import {  CustomToastrService, ToastrMessageType, ToastrPosition } from '../../user/custom-toastr.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserAuthService {
-
   constructor(
     private httpClientService: HttpClientService,
     private toastrService: CustomToastrService
@@ -33,6 +32,7 @@ export class UserAuthService {
     )) as TokenResponse;
     if (tokenResponse)
       localStorage.setItem('accessToken', tokenResponse.token.accessToken);
+    localStorage.setItem('refleshToken', tokenResponse.token.refleshToken);
     // localStorage.setItem('expiration', token.expirationDate.toString());
     this.toastrService.message('Kullanıcı girişi başarılı', '', {
       messageType: ToastrMessageType.Success,
@@ -58,11 +58,31 @@ export class UserAuthService {
     )) as TokenResponse;
     if (tokenResponse)
       localStorage.setItem('accessToken', tokenResponse.token.accessToken);
+    localStorage.setItem('refleshToken', tokenResponse.token.refleshToken);
     // localStorage.setItem('expiration', token.expirationDate.toString());
     this.toastrService.message('Kullanıcı girişi başarılı', '', {
       messageType: ToastrMessageType.Success,
       position: ToastrPosition.BottomRight,
     });
+    callBackFunction();
+  }
+
+  async refleshTokenLogin(refleshToken: string, callBackFunction?: () => void): Promise<any> {
+    const observable: Observable<any | TokenResponse> =
+      this.httpClientService.post(
+        {
+          action: 'refleshtokenlogin',
+          controller: 'auth',
+        },
+        { refleshToken: refleshToken }
+      );
+    const tokenResponse: TokenResponse = (await firstValueFrom(
+      observable
+    )) as TokenResponse;
+    if (tokenResponse)
+      localStorage.setItem('accessToken', tokenResponse.token.accessToken);
+    localStorage.setItem('refleshToken', tokenResponse.token.refleshToken);
+    // localStorage.setItem('expiration', token.expirationDate.toString());
     callBackFunction();
   }
 }
