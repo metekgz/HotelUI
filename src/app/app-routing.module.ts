@@ -14,6 +14,7 @@ const routes: Routes = [
   ],canActivate:[AuthGuard]},
   {path:"",component:HomeComponent},
   {path:"products",loadChildren:()=> import("./user/components/products/products.module").then(module=>module.ProductsModule)},
+  {path:"products/:pageNo",loadChildren:()=> import("./user/components/products/products.module").then(module => module.ProductsModule)},
   {path:"rooms",loadChildren:()=> import("./user/components/rooms/rooms.module").then(module=>module.RoomsModule)},
   {path:"register",loadChildren:()=> import("./user/components/register/register.module").then(module => module.RegisterModule)},
   {path:"login",loadChildren:()=> import("./user/components/login/login.module").then(module => module.LoginModule)}
