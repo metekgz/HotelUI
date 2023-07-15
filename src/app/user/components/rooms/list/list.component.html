@@ -1,0 +1,58 @@
+<div
+  class="card mb-3 fw-normal mt-3 mb-3"
+  style="float: left; width: 18rem; margin-left: 60px; margin-right: 20px"
+  *ngFor="let hotelRoom of hotelRooms"
+>
+
+  <div class="card-body">
+    <h2 class="card-title">{{ hotelRoom.roomname }}</h2>
+    <p class="card-text">
+      <strong>Oda Fiyatı :</strong> {{ hotelRoom.price | currency : "₺" }}
+    </p>
+    <p class="card-text"><strong>Açıklama :</strong> {{ hotelRoom.description }}</p>
+    <a href="#" class="btn btn-primary">Odayı Seç</a>
+  </div>
+</div>
+<footer class="fixed-bottom">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a
+          class="page-link"
+          [routerLink]="[
+            '/products',
+            currentPageNo - 1 <= 0 ? 1 : currentPageNo - 1
+          ]"
+          aria-label="Previous"
+        >
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Geri</span>
+        </a>
+      </li>
+      <li
+        class="page-item"
+        *ngFor="let pageNo of pageList"
+        routerLinkActive="active"
+      >
+        <a class="page-link" [routerLink]="['/products', pageNo]">{{
+          pageNo
+        }}</a>
+      </li>
+      <li class="page-item">
+        <a
+          class="page-link"
+          [routerLink]="[
+            '/products',
+            currentPageNo + 1 >= totalPageCount
+              ? totalPageCount
+              : currentPageNo + 1
+          ]"
+          aria-label="Next"
+        >
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">İleri</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</footer>

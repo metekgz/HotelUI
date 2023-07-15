@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerName } from 'src/app/base/base.component';
+import { Create_HotelRoom } from 'src/app/contracts/create_hotelRoom';
+import { ListComponent } from './list/list.component';
 
 @Component({
   selector: 'app-rooms',
@@ -14,5 +16,11 @@ export class RoomsComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.showSpinner(SpinnerName.BallNewton);
+  }
+
+  @ViewChild(ListComponent) listComponents: ListComponent;
+
+  createdRooms(createdRooms:Create_HotelRoom){
+    this.listComponents.getRooms();
   }
 }

@@ -1,0 +1,23 @@
+<mat-form-field class="hotelRoom-create">
+  <mat-label>Room Name</mat-label>
+  <input matInput #txtName />
+</mat-form-field>
+
+<mat-form-field class="hotelRoom-create">
+  <mat-label>Description</mat-label>
+  <input matInput type="text" #txtDesc />
+</mat-form-field>
+
+<mat-form-field class="hotelRoom-create">
+  <mat-label>Price</mat-label>
+  <input matInput type="number" #txtPrice />
+</mat-form-field>
+
+<button
+  mat-raised-button
+  color="primary"
+  class="hotelRoom-create-button"
+  (click)="create(txtName, txtPrice, txtDesc)"
+>
+  Create Room
+</button>
